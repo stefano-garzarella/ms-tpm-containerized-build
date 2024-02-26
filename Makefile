@@ -3,7 +3,7 @@
 MSTPM_CFLAGS :=
 TPM_OPT :=
 
-ifdef DEBUG
+ifeq ($(DEBUG),1)
 MSTPM_CFLAGS += -DDEBUG=YES
 else
 MSTPM_CFLAGS += -DDEBUG=NO
