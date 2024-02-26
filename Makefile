@@ -1,6 +1,7 @@
 -include .makeconfig
 
 MSTPM_CFLAGS :=
+TPM_OPT :=
 
 ifdef DEBUG
 MSTPM_CFLAGS += -DDEBUG=YES
@@ -8,7 +9,12 @@ else
 MSTPM_CFLAGS += -DDEBUG=NO
 endif
 
-.PHONY: all clean distclean repoclean run-simulator tpm2-simulator reconfigure
+ifeq ($(MANUFACTURE),1)
+TPM_OPT += -m
+endif
+
+.PHONY: all clean distclean repoclean run-simulator run-simulator-bare \
+	tpm2-simulator reconfigure help
 
 ifneq ($(MSTPM_CFLAGS),$(OLD_MSTPM_CFLAGS))
 all tpm2-simulator: reconfigure
@@ -23,10 +29,10 @@ repoclean:
 tpm2-simulator: ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator
 
 run-simulator: tpm2-simulator
-	ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator
+	./run-in-container.sh Simulator/src/tpm2-simulator $(TPM_OPT)
 
-run-simulator-remanufactured: tpm2-simulator
-	ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator -m
+run-simulator-bare: tpm2-simulator
+	ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator $(TPM_OPT)
 
 ms-tpm-20-ref/TPMCmd/bootstrap:
 	git submodule update --init
