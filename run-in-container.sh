@@ -16,6 +16,7 @@ fi
 
 # Disable seccomp so io_uring syscalls are allowed
 exec podman run --security-opt=seccomp=unconfined --rm -it \
+    -p 2321-2322:2321-2322 \
     --user "$(id --user):$(id --group)" --userns keep-id \
     --volume ./ms-tpm-20-ref:"${VOLUME}":z "${IMAGE}" \
     /bin/sh -e -c "$*"

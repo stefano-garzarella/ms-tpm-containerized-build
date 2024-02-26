@@ -5,3 +5,4 @@ RUN dnf install -qy openssl1.1-devel make automake gcc gcc-c++ \
 
 VOLUME /usr/src/ms-tpm-20-ref
 WORKDIR /usr/src/ms-tpm-20-ref/TPMCmd
+EXPOSE 2321 2322
