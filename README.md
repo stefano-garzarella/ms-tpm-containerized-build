@@ -79,6 +79,9 @@ Options:
   make MANUFACTURE=1 [targets] - run the simulator with `-m` option
                                  forces NV state of the TPM simulator to be
                                  (re)manufactured
+  make PORT=value [targets]    - use custom ports in the TPM simulator
+                                 PORT is used for "TPM command server" [default 2321]
+                                 PORT+1 is used for "Platform server" [default 2322]
 ```
 
 ## `tpm2-tools` and `tpm2-abrmd`

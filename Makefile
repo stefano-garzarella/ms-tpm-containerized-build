@@ -2,6 +2,7 @@
 
 MSTPM_CFLAGS :=
 TPM_OPT :=
+PORT := 2321
 
 ifeq ($(DEBUG),1)
 MSTPM_CFLAGS += -DDEBUG=YES
@@ -29,10 +30,12 @@ repoclean:
 tpm2-simulator: ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator
 
 run-simulator: tpm2-simulator
-	./run-in-container.sh Simulator/src/tpm2-simulator $(TPM_OPT)
+	@echo "Container's ports 2321-2322 published to local ports $(PORT)-$$(( $(PORT) + 1 ))"
+	./run-in-container.sh -e "-p $(PORT)-$$(( $(PORT) + 1 )):2321-2322" \
+		-c "Simulator/src/tpm2-simulator $(TPM_OPT)"
 
 run-simulator-bare: tpm2-simulator
-	ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator $(TPM_OPT)
+	ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator $(PORT) $(TPM_OPT)
 
 ms-tpm-20-ref/TPMCmd/bootstrap:
 	git submodule update --init
@@ -77,4 +80,7 @@ help:
 	@echo  '  make MANUFACTURE=1 [targets] - run the simulator with `-m` option'
 	@echo  '                                 forces NV state of the TPM simulator to be'
 	@echo  '                                 (re)manufactured'
+	@echo  '  make PORT=value [targets]    - use custom ports in the TPM simulator'
+	@echo  '                                 PORT is used for "TPM command server" [default 2321]'
+	@echo  '                                 PORT+1 is used for "Platform server" [default 2322]'
 
