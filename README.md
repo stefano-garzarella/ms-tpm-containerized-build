@@ -11,6 +11,35 @@ Repository `ms-tpm-20-ref` is added as a `git submodule` and automatically
 cloned from the Makefile. To start using it, you just need to use the Makefile,
 for example by running `make run-simulator`.
 
+## Prerequisites
+
+`buildah` and `podman` are used by the scripts in this repository. So make sure
+you have them installed in your system.
+
+### Fedora/RHEL/CentOS
+
+```bash
+dnf install buildah podman
+```
+
+### Arch Linux
+
+```bash
+pacman -S buildah podman
+```
+
+### Debian/Ubuntu
+
+```bash
+apt-get install buildah podman
+```
+
+### openSUSE
+
+```bash
+zypper install buildah podman
+```
+
 ## Debug mode
 
 The simulator will NOT be compiled in debug mode by default, so this way it
