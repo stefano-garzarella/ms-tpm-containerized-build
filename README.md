@@ -80,3 +80,42 @@ Options:
                                  forces NV state of the TPM simulator to be
                                  (re)manufactured
 ```
+
+## `tpm2-tools` and `tpm2-abrmd`
+
+`tpm2-tools` and `tpm2-abrmd` can communicate with the ms-tpm simulator using
+`mssim` TCTI (Transmission Interface).
+
+See for more details at https://tpm2-tools.readthedocs.io/en/latest/man/common/tcti/
+
+### Examples
+
+#### `tpm2-tools` direct communication
+
+```bash
+export TPM2TOOLS_TCTI="mssim:host=192.168.3.5,port=2321
+# otherwise -T mssim:host=192.168.3.5,port=2321 must be used for each command
+
+# If the simulator is running locally on the default port (2321), just `mssim`
+# is enough
+export TPM2TOOLS_TCTI="mssim"
+
+tpm2_startup -c
+tpm2_getrandom 4 | hexdump
+```
+
+### Using `tpm2-abrmd` - TPM2 access broker and resource management daemon
+
+```bash
+sudo -u tss tpm2-abrmd --tcti=mssim
+
+# If the following error is printed, you should stop `tpm2-abrmd.service`
+# ** (tpm2-abrmd:48599): CRITICAL **: 11:45:50.843: Failed to acquire DBus name com.intel.tss2.Tabrmd. UID 59 must be allowed to "own" this name. Check DBus config and check that this is running as user tss or root.
+sudo systemctl stop tpm2-abrmd.service
+
+# restart it again
+sudo -u tss tpm2-abrmd --tcti=mssim
+
+export TPM2TOOLS_TCTI="tabrmd"
+sudo -E tpm2_getrandom 4 | hexdump
+```
