@@ -49,3 +49,32 @@ ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator: ms-tpm-20-ref/TPMCmd/Makefile
 
 reconfigure: distclean
 	$(MAKE) ms-tpm-20-ref/TPMCmd/Makefile
+
+help:
+	@echo  'Cleaning targets:'
+	@echo  '  clean           - Remove files normally created during the building'
+	@echo  '                    Call `make clean` in `ms-tpm-20-ref/TPMCmd`'
+	@echo  '  distclean       - clean + remove files created during the configuration'
+	@echo  '                    Call `make distlclean` in `ms-tpm-20-ref/TPMCmd`'
+	@echo  '  repoclean       - Remove `ms-tpm-20-ref` git submodule completly, so'
+	@echo  '                    next builds will clone it again, starting from a'
+	@echo  '                    completely clean source base'
+	@echo  ''
+	@echo  'Building targets:'
+	@echo  '  all                 - Build all targets in `ms-tpm-20-ref` using a container'
+	@echo  '  tpm2-simulator      - Build the MS TPM simulator using a container'
+	@echo  ''
+	@echo  'Running targets:'
+	@echo  '  run-simulator       - Run the MS TPM simulator in a container'
+	@echo  '  run-simulator-bare  - Run the MS TPM simulator locally (NOT in a container)'
+	@echo  '                        `openssl1.1` library must be installed'
+	@echo  ''
+	@echo  'Options:'
+	@echo  '  make DEBUG=1 [targets]       - build with `-DDEBUG=YES` defined in CFLAGS'
+	@echo  '                                 Bulding the simulator in debug mode will'
+	@echo  '                                 provide fixed seeding of the RNG and other'
+	@echo  '                                 behaviors useful for debugging'
+	@echo  '  make MANUFACTURE=1 [targets] - run the simulator with `-m` option'
+	@echo  '                                 forces NV state of the TPM simulator to be'
+	@echo  '                                 (re)manufactured'
+
