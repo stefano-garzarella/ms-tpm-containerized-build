@@ -15,7 +15,7 @@ TPM_OPT += -m
 endif
 
 .PHONY: all clean distclean repoclean run-simulator run-simulator-bare \
-	tpm2-simulator reconfigure help
+	manufacture tpm2-simulator reconfigure help
 
 ifneq ($(MSTPM_CFLAGS),$(OLD_MSTPM_CFLAGS))
 all tpm2-simulator: reconfigure
@@ -36,6 +36,9 @@ run-simulator: tpm2-simulator
 
 run-simulator-bare: tpm2-simulator
 	ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator $(PORT) $(TPM_OPT)
+
+manufacture: tpm2-simulator
+	./run-in-container.sh -c "timeout --preserve-status 1s Simulator/src/tpm2-simulator -m" || true
 
 ms-tpm-20-ref/TPMCmd/bootstrap:
 	git submodule update --init
@@ -71,6 +74,7 @@ help:
 	@echo  '  run-simulator       - Run the MS TPM simulator in a container'
 	@echo  '  run-simulator-bare  - Run the MS TPM simulator locally (NOT in a container)'
 	@echo  '                        `openssl1.1` library must be installed'
+	@echo  '  manufacture         - (Re)manufacture the MS TPM simulator and exit'
 	@echo  ''
 	@echo  'Options:'
 	@echo  '  make DEBUG=1 [targets]       - build with `-DDEBUG=YES` defined in CFLAGS'
